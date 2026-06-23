@@ -1,0 +1,24 @@
+# Secrets
+.env
+
+# Generated vector store
+data/vectorstore/
+
+# Your private CVs/JDs — keep samples, ignore the rest.
+# Uncomment the next two lines if you don't want your real data in git:
+# data/cv/*
+# data/jd/*
+# !data/cv/sample_cv.md
+# !data/jd/sample_research_scientist.md
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
