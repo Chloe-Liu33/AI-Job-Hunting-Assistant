@@ -384,9 +384,15 @@ class QdrantBackend:
             must.append(models.FieldCondition(key="kind", match=models.MatchValue(value=kind)))
         if name:
             must.append(models.FieldCondition(key="name", match=models.MatchValue(value=name)))
-        res = client.search(
-            CHUNKS, query_vector=qv, query_filter=models.Filter(must=must), limit=k
-        )
+        # query_points is the current API (client.search was removed in newer
+        # qdrant-client); fall back to search for older client versions.
+        flt = models.Filter(must=must)
+        if hasattr(client, "query_points"):
+            res = client.query_points(
+                CHUNKS, query=qv, query_filter=flt, limit=k, with_payload=True
+            ).points
+        else:
+            res = client.search(CHUNKS, query_vector=qv, query_filter=flt, limit=k)
         return [
             {
                 "kind": p.payload["kind"],

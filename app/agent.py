@@ -13,10 +13,10 @@ it?" makes the agent (1) call rank_jobs, (2) search the winning JD and the CV,
 template.
 
 It runs on the SAME free keys as the rest of the app: LangChain's
-`ChatGoogleGenerativeAI` (Gemini) or `ChatGroq` (Groq). Heavy deps are imported
-lazily so the base app still runs without them installed — install with:
+`ChatGoogleGenerativeAI` (Gemini) or `ChatGroq` (Groq). LangChain ships in the
+base requirements; if missing, install with:
 
-    pip install -r requirements-extras.txt
+    pip install -r requirements.txt
 """
 from __future__ import annotations
 
@@ -95,7 +95,7 @@ def build_agent(user_id=None):
         from langchain_core.tools import Tool
     except ImportError as e:
         raise ImportError(
-            "LangChain not installed. Run: pip install -r requirements-extras.txt"
+            "LangChain not installed. Run: pip install -r requirements.txt"
         ) from e
 
     llm = _build_llm()

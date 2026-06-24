@@ -299,7 +299,7 @@ with tab_agent:
                         st.caption(s["observation"][:300])
         except ImportError as e:
             st.error(str(e))
-            st.code("pip install -r requirements-extras.txt")
+            st.code("pip install -r requirements.txt")
 
 with tab_ops:
     st.subheader("LLMOps — observability")
