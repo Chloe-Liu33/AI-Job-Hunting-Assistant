@@ -63,7 +63,7 @@ def _build_llm():
         return ChatGoogleGenerativeAI(
             model=os.getenv("GEMINI_MODEL", "gemini-2.0-flash"),
             google_api_key=os.environ["GEMINI_API_KEY"],
-            temperature=0.2,
+            temperature=0,
         )
     if provider == "groq":
         from langchain_groq import ChatGroq
@@ -71,7 +71,7 @@ def _build_llm():
         return ChatGroq(
             model=os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile"),
             api_key=os.environ["GROQ_API_KEY"],
-            temperature=0.2,
+            temperature=0,
         )
     raise RuntimeError("No LLM provider configured. Set GEMINI_API_KEY or GROQ_API_KEY.")
 
@@ -189,12 +189,36 @@ def _parse_v0(result) -> dict:
     return {"answer": result.get("output", ""), "steps": steps}
 
 
-def run_agent(question: str, user_id=None) -> dict:
-    """Run the agent on a question. Returns {answer, steps}. Traced for LLMOps."""
+def run_agent(question: str, user_id=None, max_attempts: int = 3) -> dict:
+    """Run the agent on a question. Returns {answer, steps}. Traced for LLMOps.
+
+    Llama tool-calling on Groq occasionally emits a malformed tool call (HTTP 400
+    tool_use_failed). Since it's intermittent, retry a few times and, if it never
+    recovers, return a friendly message instead of crashing the UI."""
     with obs.span("agent.run", question=question[:200]):
         api, agent = build_agent(user_id=user_id)
-        if api == "v1":
-            result = agent.invoke({"messages": [{"role": "user", "content": question}]})
-            return _parse_v1(result)
-        result = agent.invoke({"input": question})
-        return _parse_v0(result)
+        payload = (
+            {"messages": [{"role": "user", "content": question}]}
+            if api == "v1"
+            else {"input": question}
+        )
+        parse = _parse_v1 if api == "v1" else _parse_v0
+        last_err = None
+        for _ in range(max_attempts):
+            try:
+                return parse(agent.invoke(payload))
+            except Exception as e:  # noqa: BLE001
+                msg = str(e)
+                if "tool_use_failed" in msg or "Failed to call a function" in msg:
+                    last_err = e
+                    continue  # malformed tool call — transient on Groq/Llama, retry
+                raise
+        return {
+            "answer": (
+                "⚠️ The model kept producing a malformed tool call (a known "
+                "flakiness of Llama tool-calling on Groq). Try rephrasing the "
+                "question, run it again, or set `LLM_PROVIDER=gemini` in `.env`."
+            ),
+            "steps": [],
+            "error": str(last_err),
+        }
