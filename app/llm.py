@@ -25,7 +25,7 @@ def detect_provider() -> str | None:
 def current_model(provider: str | None = None) -> str:
     provider = provider or detect_provider()
     if provider == "gemini":
-        return os.getenv("GEMINI_MODEL", "gemini-2.0-flash")
+        return os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
     if provider == "groq":
         return os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
     return "unknown"
