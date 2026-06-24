@@ -4,6 +4,16 @@
 # Generated vector store
 data/vectorstore/
 
+# Per-user accounts & private workspaces (CVs/JDs/index) — never commit
+data/users/
+data/users.json
+
+# LLMOps trace log (generated at runtime)
+data/traces/
+
+# Benchmark reports (generated)
+eval/results/
+
 # Your private CVs/JDs — keep samples, ignore the rest.
 # Uncomment the next two lines if you don't want your real data in git:
 # data/cv/*

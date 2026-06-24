@@ -7,3 +7,16 @@ pypdf>=5.0
 python-docx>=1.1
 python-dotenv>=1.0
 numpy>=1.26
+
+# LangChain powers the in-app 🤖 Agent tab. Kept in base (not extras) so the
+# agent works on a default Hugging Face / cloud deploy. Pure-Python, light next
+# to torch which is already pulled in by sentence-transformers above.
+langchain>=0.3
+langchain-core>=0.3
+langchain-google-genai>=2.0
+langchain-groq>=0.2
+
+# External vector DB backend (store.py). Only used when QDRANT_URL is set;
+# without it the app falls back to local files + FAISS. Kept in base so a cloud
+# deploy can switch to persistent Qdrant storage with just an env var.
+qdrant-client>=1.7
