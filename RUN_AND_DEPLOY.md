@@ -23,8 +23,8 @@ data). Requires **Python 3.10+**.
 ## 1. Install dependencies
 
 ```bash
-git clone https://github.com/Chloe-Liu33/Agent-job-search.git
-cd Agent-job-search
+git clone https://github.com/Chloe-Liu33/AI-Job-Hunting-Assistant.git
+cd AI-Job-Hunting-Assistant
 python -m venv .venv
 source .venv/bin/activate          # Windows: .venv\Scripts\activate
 pip install -r requirements.txt

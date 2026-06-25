@@ -85,8 +85,8 @@ stored once under a reserved `_shared` id).
 
 ```bash
 # 1. Clone & install
-git clone https://github.com/Chloe-Liu33/Agent-job-search.git
-cd Agent-job-search
+git clone https://github.com/Chloe-Liu33/AI-Job-Hunting-Assistant.git
+cd AI-Job-Hunting-Assistant
 pip install -r requirements.txt
 
 # 2. Add your free API key (pick ONE)
