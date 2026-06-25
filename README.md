@@ -10,7 +10,11 @@ python_version: "3.11"
 pinned: false
 ---
 
-# 求职 Agent · Job-Hunting Agent
+# Job-Hunting Agent
+
+> ⚠️ **Work in progress — not officially launched.** This project is still being
+> tested and organized. Features, data, and the live demo may change or break at
+> any time. Treat it as a preview / portfolio demo, not a finished product.
 
 A **zero-cost, no-GPU** job-hunting assistant. Match your CV against job descriptions, get tailored fit analysis, generate cover-letter drafts, and surface gaps — all running on free cloud LLMs + local CPU embeddings.
 
@@ -52,7 +56,6 @@ pip install -r requirements-extras.txt
 
 ### Persistent storage (deploys)
 
-Everything the app writes (accounts, per-user CVs/JDs, indexes, traces) goes
 Storage is **pluggable** via [app/store.py](app/store.py):
 
 - **file (default):** accounts in a JSON file, CVs/JDs as files, a per-user FAISS
@@ -123,7 +126,7 @@ You only need one. The app auto-detects which key is present.
 
 ## Run it / Deploy it
 
-Full step-by-step (local **and** Hugging Face) is in **[运行与部署.md](运行与部署.md)**.
+Full step-by-step (local **and** Hugging Face) is in **[RUN_AND_DEPLOY.md](RUN_AND_DEPLOY.md)**.
 
 - **Local:** clone → `pip install -r requirements.txt` → set keys in `.env` → `streamlit run app/main.py`.
 - **Hugging Face Spaces (free CPU):** create a Streamlit Space → `git push` this repo → add `GROQ_API_KEY`, `LLM_PROVIDER=groq`, `QDRANT_URL`, `QDRANT_API_KEY` as Space **Secrets** (HF doesn't read `.env`). No code changes, no GPU.
@@ -165,6 +168,6 @@ job-agent/
 
 ## Notes
 
-- First run downloads the embedding model (`all-MiniLM-L6-v2`, ~80 MB) once. For multilingual CVs/JDs (English + 中文), switch `EMBED_MODEL` in `.env` to `intfloat/multilingual-e5-small`.
+- First run downloads the embedding model (`all-MiniLM-L6-v2`, ~80 MB) once. For multilingual CVs/JDs (English + Chinese, etc.), switch `EMBED_MODEL` in `.env` to `intfloat/multilingual-e5-small`.
 - The LLM call is the only network dependency; embeddings and search are fully offline.
 - No data leaves your machine except the text you send to the LLM for analysis.
