@@ -121,12 +121,14 @@ You only need one. The app auto-detects which key is present.
 3. **Analyze** — for a chosen JD, the LLM gives you: fit score reasoning, matched strengths, gaps, and keywords to add.
 4. **Draft** — generates a tailored cover-letter / outreach draft you can edit.
 
-## Deploy to Hugging Face Spaces (free)
+## Run it / Deploy it
 
-1. Create a new **Streamlit** Space (CPU basic — free).
-2. Push this repo to it.
-3. In Space **Settings → Variables and secrets**, add your `GEMINI_API_KEY` (or `GROQ_API_KEY`).
-4. Done. No GPU needed.
+Full step-by-step (local **and** Hugging Face) is in **[运行与部署.md](运行与部署.md)**.
+
+- **Local:** clone → `pip install -r requirements.txt` → set keys in `.env` → `streamlit run app/main.py`.
+- **Hugging Face Spaces (free CPU):** create a Streamlit Space → `git push` this repo → add `GROQ_API_KEY`, `LLM_PROVIDER=groq`, `QDRANT_URL`, `QDRANT_API_KEY` as Space **Secrets** (HF doesn't read `.env`). No code changes, no GPU.
+
+Live demo: https://limei-liu-agent-job-search.hf.space
 
 ## Project layout
 
